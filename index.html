@@ -33,16 +33,17 @@
         }
         label { font-size: 0.85rem; font-weight: 600; color: #334155; }
         
-        /* دکمه راهنما */
+        /* دکمه تخمین مصرف */
         .help-btn {
             background: #e0f2fe;
             color: #0369a1;
             border: 1px solid #bae6fd;
-            padding: 3px 8px;
-            font-size: 0.75rem;
+            padding: 4px 10px;
+            font-size: 0.78rem;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.2s;
         }
         .help-btn:hover { background: #bae6fd; }
 
@@ -129,11 +130,12 @@
     <div class="input-group">
         <div class="label-row">
             <label for="kwh">Monatlicher Stromverbrauch (kWh):</label>
-            <button type="button" class="help-btn" onclick="toggleHelp()">❓ Hilfe zur Ermittlung</button>
+            <!-- دکمه جدید با متن استاندارد آلمانی -->
+            <button type="button" class="help-btn" onclick="toggleHelp()">💡 Stromverbrauch schätzen</button>
         </div>
         <input type="number" id="kwh" placeholder="z. B. 400">
 
-        <!-- باکس راهنمای تماماً آلمانی -->
+        <!-- باکس راهنمای متنی و جدولی -->
         <div class="tutorial-box" id="helpBox">
             <h5>📖 So ermitteln Sie Ihren Stromverbrauch:</h5>
             <ol style="padding-left: 16px; margin: 4px 0;">
