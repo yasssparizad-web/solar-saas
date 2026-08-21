@@ -3,49 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photovoltaik Rechner Deutschland</title>
+    <title>Photovoltaik Rechner & KfW Finanzierung</title>
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: #f8fafc; 
             text-align: center; 
-            padding: 40px 10px; 
+            padding: 30px 10px; 
             color: #1e293b; 
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .box { 
             background: white; 
-            max-width: 480px; 
+            max-width: 550px; 
             margin: auto; 
-            padding: 30px; 
+            padding: 25px; 
             border-radius: 16px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
             text-align: left;
         }
-        h2 { margin-top: 0; color: #0f766e; text-align: center; }
-        .subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; text-align: center; }
-        .input-group { margin-bottom: 15px; }
-        label { font-size: 0.9rem; font-weight: 600; color: #334155; }
+        h2 { margin-top: 0; color: #0f766e; text-align: center; font-size: 1.5rem; }
+        .subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 20px; text-align: center; }
+        .input-group { margin-bottom: 12px; }
+        label { font-size: 0.85rem; font-weight: 600; color: #334155; }
         input { 
             width: 100%; 
-            padding: 12px; 
-            margin-top: 6px; 
+            padding: 10px; 
+            margin-top: 4px; 
             border-radius: 8px; 
             border: 1px solid #cbd5e1; 
             box-sizing: border-box; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             outline: none;
         }
         input:focus { border-color: #0f766e; }
         button { 
             width: 100%; 
-            padding: 14px; 
+            padding: 12px; 
             margin-top: 10px; 
             border-radius: 8px; 
             border: none; 
             background: #0f766e; 
             color: white; 
-            font-size: 1.1rem; 
+            font-size: 1rem; 
             font-weight: bold; 
             cursor: pointer; 
             transition: background 0.2s;
@@ -53,18 +53,39 @@
         button:hover { background: #115e59; }
         .result { 
             display: none; 
-            margin-top: 25px; 
+            margin-top: 20px; 
             background: #f0fdf4; 
-            padding: 20px; 
+            padding: 18px; 
             border-radius: 12px; 
             border: 1px solid #bbf7d0;
         }
-        .result h4 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; }
-        .result p { margin: 10px 0; font-size: 0.95rem; color: #334155; }
-        .result b { color: #0f766e; font-size: 1.05rem; }
+        .result h4 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #cbd5e1; padding-bottom: 6px; font-size: 1.05rem; }
+        .result p { margin: 8px 0; font-size: 0.9rem; color: #334155; }
+        .result b { color: #0f766e; }
+        
+        /* Table Styling */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.82rem;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            text-align: center;
+        }
+        .comparison-table th {
+            background-color: #e2e8f0;
+            color: #0f172a;
+        }
+        .highlight-row {
+            background-color: #dcfce7;
+            font-weight: bold;
+        }
         .financial-section { 
             margin-top: 15px; 
-            padding-top: 15px; 
+            padding-top: 12px; 
             border-top: 1px dashed #cbd5e1; 
         }
     </style>
@@ -72,13 +93,13 @@
 <body>
 
 <div class="box">
-    <h2>☀️ Solaranlagen-Rechner (Deutschland)</h2>
+    <h2>☀️ Solaranlagen & KfW-Finanzierung</h2>
     <p class="subtitle">
-        Berechnen Sie die optimale Leistung und Wirtschaftlichkeit Ihrer PV-Anlage nach aktuellen EEG-Standards (0% MwSt).
+        Berechnen Sie Ihre Ersparnis & Vergleichen Sie Direktkauf mit der KfW 270 Förderung (0% MwSt).
     </p>
 
     <div class="input-group">
-        <label for="kwh">Monatlicher Stromverbrauch (kWh): / مصرف ماهانه (کیلووات‌ساعت)</label>
+        <label for="kwh">Monatlicher Stromverbrauch (kWh): / مصرف ماهانه</label>
         <input type="number" id="kwh" placeholder="z.B. 400">
     </div>
 
@@ -92,14 +113,43 @@
     <div class="result" id="resultBox">
         <h4>📐 Technische Empfehlung:</h4>
         <p>⚡ Empfohlene Leistung: <b id="capacity"></b> kWp</p>
-        <p>🧩 Anzahl Solarmodule (440W): <b id="panels"></b> Stück</p>
-        <p>🔌 Wechselrichter-Leistung: <b id="inverter"></b> kW</p>
+        <p>🧩 Solarmodule (440W): <b id="panels"></b> Stück</p>
+        <p>🔌 Wechselrichter: <b id="inverter"></b> kW</p>
 
         <div class="financial-section">
-            <h4 style="color: #0369a1;">💶 Wirtschaftlichkeitsanalyse (Euro):</h4>
-            <p>💵 Geschätzte Investition (0% MwSt): <b id="totalCost" style="color: #0369a1;"></b> €</p>
-            <p>📈 Monatliche Ersparnis / Ertrag: <b id="monthlySavings" style="color: #0369a1;"></b> €</p>
-            <p>⏳ Amortisationszeit: <b id="payback" style="color: #0369a1;"></b> Jahre</p>
+            <h4 style="color: #0369a1;">💶 Finanzierungsvergleich (Kauf vs. KfW 270):</h4>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Eigenkapital</th>
+                        <th>Monatl. Rate</th>
+                        <th>Ertrag/Monat</th>
+                        <th>Netto-Vorteil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Direktkauf</b></td>
+                        <td><span id="cashTotal"></span> €</td>
+                        <td>0 €</td>
+                        <td>+<span id="cashIncome"></span> €</td>
+                        <td style="color:#0f766e;"><b>+<span id="cashNet"></span> €</b></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td><b>KfW 270 Loan</b></td>
+                        <td><b>0 €</b></td>
+                        <td>-<span id="kfwPay"></span> €</td>
+                        <td>+<span id="kfwIncome"></span> €</td>
+                        <td style="color:#0369a1;"><b>+<span id="kfwNet"></span> €</b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="font-size:0.8rem; color:#64748b; margin-top:10px;">
+                * KfW 270: 10 Jahre Laufzeit, ca. 4,5% Effektivzins. Die Anlage finanziert sich monatlich selbst!
+            </p>
         </div>
     </div>
 </div>
@@ -132,10 +182,14 @@ async function calculate() {
         document.getElementById('panels').innerText = data.total_panels_440w.toLocaleString('de-DE');
         document.getElementById('inverter').innerText = data.inverter_size_kw.toLocaleString('de-DE');
 
-        // Financial details (EUR)
-        document.getElementById('totalCost').innerText = data.estimated_total_cost_euro.toLocaleString('de-DE');
-        document.getElementById('monthlySavings').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
-        document.getElementById('payback').innerText = data.payback_years.toLocaleString('de-DE');
+        // Comparison Table Data
+        document.getElementById('cashTotal').innerText = data.estimated_total_cost_euro.toLocaleString('de-DE');
+        document.getElementById('cashIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+        document.getElementById('cashNet').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+
+        document.getElementById('kfwPay').innerText = data.kfw_monthly_payment.toLocaleString('de-DE');
+        document.getElementById('kfwIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+        document.getElementById('kfwNet').innerText = data.kfw_net_monthly_benefit.toLocaleString('de-DE');
 
         document.getElementById('resultBox').style.display = 'block';
     } catch (e) {
