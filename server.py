@@ -24,7 +24,7 @@ def calculate():
         try:
             monthly_kwh = float(raw_kwh)
         except (ValueError, TypeError):
-            return jsonify({"error": "Ungültige Eingabe. Bitte geben Sie eine Zahl یک عدد معتبر وارد کنید."}), 400
+            return jsonify({"error": "Bitte geben Sie einen gültigen Zahlenwert ein."}), 400
 
         if monthly_kwh <= 0:
             return jsonify({"error": "Der Verbrauch muss größer als 0 sein."}), 400
