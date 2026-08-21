@@ -18,17 +18,16 @@ def home():
 def calculate():
     try:
         data = request.get_json(silent=True) or {}
-        
         raw_kwh = data.get('monthly_kwh', 0)
         phone = data.get('phone', '')
 
         try:
             monthly_kwh = float(raw_kwh)
         except (ValueError, TypeError):
-            return jsonify({"error": "لطفاً میزان مصرف را به صورت عدد معتبر وارد کنید."}), 400
+            return jsonify({"error": "Ungültige Eingabe. Bitte geben Sie eine Zahl یک عدد معتبر وارد کنید."}), 400
 
         if monthly_kwh <= 0:
-            return jsonify({"error": "میزان مصرف باید بزرگتر از صفر باشد."}), 400
+            return jsonify({"error": "Der Verbrauch muss größer als 0 sein."}), 400
 
         result = calculate_solar_system(monthly_kwh)
 
@@ -42,17 +41,17 @@ def calculate():
         return jsonify(result)
 
     except Exception as e:
-        return jsonify({"error": f"خطای داخلی سرور: {str(e)}"}), 500
+        return jsonify({"error": f"Server Error: {str(e)}"}), 500
 
 @app.route('/admin')
 def admin():
-    html = "<h2 style='font-family:tahoma;'>لیست درخواست‌های مشتریان (لیدها)</h2><ul style='font-family:tahoma;'>"
+    html = "<h2 style='font-family:sans-serif;'>Kundenanfragen (Leads)</h2><ul style='font-family:sans-serif;'>"
     if not leads:
-        html += "<li>هنوز درخواستی ثبت نشده است.</li>"
+        html += "<li>Keine Anfragen vorhanden.</li>"
     else:
         for lead in leads:
-            html += f"<li>شماره: {lead['phone']} | مصرف: {lead['consumption']}kWh | ظرفیت: {lead['kw']}kW</li>"
-    html += "</ul><br><a href='/' style='font-family:tahoma;'>بازگشت به سایت</a>"
+            html += f"<li>Telefon: {lead['phone']} | Verbrauch: {lead['consumption']} kWh | Anlagengröße: {lead['kw']} kWp</li>"
+    html += "</ul><br><a href='/' style='font-family:sans-serif;'>Zurück zur Webseite</a>"
     return html
 
 if __name__ == '__main__':
