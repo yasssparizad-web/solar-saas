@@ -33,7 +33,7 @@
         }
         label { font-size: 0.85rem; font-weight: 600; color: #334155; }
         
-        /* دکمه جدید آموزش */
+        /* دکمه راهنما */
         .help-btn {
             background: #e0f2fe;
             color: #0369a1;
@@ -73,7 +73,7 @@
         }
         button.calc-btn:hover { background: #115e59; }
 
-        /* باکس آموزش کشویی */
+        /* باکس راهنما */
         .tutorial-box {
             display: none;
             margin-top: 10px;
@@ -87,7 +87,7 @@
         }
         .tutorial-box h5 { margin: 0 0 8px 0; color: #0369a1; font-size: 0.9rem; }
         .tutorial-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.78rem; }
-        .tutorial-table th, .tutorial-table td { border: 1px solid #cbd5e1; padding: 4px; text-align: center; }
+        .tutorial-table th, .tutorial-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
         .tutorial-table th { background: #e0f2fe; }
 
         /* بخش نتایج */
@@ -123,63 +123,66 @@
 <div class="box">
     <h2>☀️ Solaranlagen & KfW-Finanzierung</h2>
     <p class="subtitle">
-        Berechnen Sie Ihre Ersparnis & Vergleichen Sie Direktkauf mit der KfW 270 Förderung (0% MwSt).
+        Berechnen Sie Ihre Ersparnis & vergleichen Sie Direktkauf mit der KfW 270 Förderung (0% MwSt).
     </p>
 
     <div class="input-group">
         <div class="label-row">
-            <label for="kwh">Monatlicher Stromverbrauch (kWh): / مصرف ماهانه</label>
-            <!-- دکمه آموزش -->
-            <button type="button" class="help-btn" onclick="toggleHelp()">❓ راهنما / Hilfe</button>
+            <label for="kwh">Monatlicher Stromverbrauch (kWh):</label>
+            <button type="button" class="help-btn" onclick="toggleHelp()">❓ Hilfe zur Ermittlung</button>
         </div>
-        <input type="number" id="kwh" placeholder="z.B. 400">
+        <input type="number" id="kwh" placeholder="z. B. 400">
 
-        <!-- باکس متنی آموزش که با کلیک روی دکمه باز می‌شود -->
+        <!-- باکس راهنمای تماماً آلمانی -->
         <div class="tutorial-box" id="helpBox">
-            <h5>📖 نحوه تشخیص میزان مصرف برق / Stromverbrauch ermitteln</h5>
+            <h5>📖 So ermitteln Sie Ihren Stromverbrauch:</h5>
             <ol style="padding-left: 16px; margin: 4px 0;">
-                <li><b>قبض برق آلمان (Stromabrechnung):</b> کلمه <i>Jahresverbrauch</i> را روی قبض پیدا کرده و عدد آن را تقسیم بر ۱۲ کنید.</li>
-                <li><b>تخمین بر اساس تعداد افراد (راهکار سریع):</b></li>
+                <li><b>Stromabrechnung:</b> Schauen Sie auf Ihre letzte Jahresabrechnung unter <i>Jahresverbrauch</i> und teilen Sie diesen Wert durch 12.</li>
+                <li><b>Richtwerte nach Haushaltsgröße:</b> (Klicken Sie auf eine Zeile zur Übernahme)</li>
             </ol>
             <table class="tutorial-table">
-                <tr>
-                    <th>تعداد افراد</th>
-                    <th>مصرف سالانه</th>
-                    <th>مصرف ماهانه (عدد پیشنهادی)</th>
-                </tr>
-                <tr onclick="setKwh(125)" style="cursor:pointer; background:#fff;">
-                    <td>۱ نفر (Single)</td>
-                    <td>1.500 kWh</td>
-                    <td><b>125 kWh</b> (کلیک جهت انتخاب)</td>
-                </tr>
-                <tr onclick="setKwh(208)" style="cursor:pointer; background:#fff;">
-                    <td>۲ نفر (Paar)</td>
-                    <td>2.500 kWh</td>
-                    <td><b>208 kWh</b> (کلیک جهت انتخاب)</td>
-                </tr>
-                <tr onclick="setKwh(291)" style="cursor:pointer; background:#fff;">
-                    <td>۳ نفر (Familie)</td>
-                    <td>3.500 kWh</td>
-                    <td><b>291 kWh</b> (کلیک جهت انتخاب)</td>
-                </tr>
-                <tr onclick="setKwh(400)" style="cursor:pointer; background:#fff;">
-                    <td>۴+ نفر (Familie)</td>
-                    <td>4.800 kWh</td>
-                    <td><b>400 kWh</b> (کلیک جهت انتخاب)</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Haushalt</th>
+                        <th>Jahresverbrauch</th>
+                        <th>Empfehlung / Monat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="setKwh(125)" style="cursor:pointer; background:#fff;">
+                        <td>1 Person</td>
+                        <td>ca. 1.500 kWh</td>
+                        <td><b>125 kWh</b></td>
+                    </tr>
+                    <tr onclick="setKwh(208)" style="cursor:pointer; background:#fff;">
+                        <td>2 Personen</td>
+                        <td>ca. 2.500 kWh</td>
+                        <td><b>208 kWh</b></td>
+                    </tr>
+                    <tr onclick="setKwh(291)" style="cursor:pointer; background:#fff;">
+                        <td>3 Personen</td>
+                        <td>ca. 3.500 kWh</td>
+                        <td><b>291 kWh</b></td>
+                    </tr>
+                    <tr onclick="setKwh(400)" style="cursor:pointer; background:#fff;">
+                        <td>4+ Personen</td>
+                        <td>ca. 4.800 kWh</td>
+                        <td><b>400 kWh</b></td>
+                    </tr>
+                </tbody>
             </table>
             <p style="font-size: 0.75rem; color: #64748b; margin-top: 6px; margin-bottom: 0;">
-                * نکته: اگر ماشین برقی (E-Auto) یا پمپ حرارتی دارید، ۵۰ تا ۱۵۰ کیلووات‌ساعت اضافه کنید.
+                * Hinweis: Bei Nutzung von E-Auto oder Wärmepumpe rechnen Sie ca. 50–150 kWh/Monat hinzu.
             </p>
         </div>
     </div>
 
     <div class="input-group">
-        <label for="phone">Telefonnummer / شماره تماس:</label>
+        <label for="phone">Telefonnummer:</label>
         <input type="text" id="phone" placeholder="+49 123 456789">
     </div>
 
-    <button class="calc-btn" onclick="calculate()">Jetzt berechnen / محاسبه</button>
+    <button class="calc-btn" onclick="calculate()">Jetzt berechnen</button>
 
     <div class="result" id="resultBox">
         <h4>📐 Technische Empfehlung:</h4>
@@ -226,20 +229,14 @@
 </div>
 
 <script>
-// باز و بسته کردن باکس آموزش
 function toggleHelp() {
     const box = document.getElementById('helpBox');
-    if (box.style.display === 'block') {
-        box.style.display = 'none';
-    } else {
-        box.style.display = 'block';
-    }
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
 }
 
-// جاگذاری عدد بر اساس انتخاب کاربر از جدول راهنما
 function setKwh(val) {
     document.getElementById('kwh').value = val;
-    document.getElementById('helpBox').style.display = 'none'; // بستن راهنما بعد انتخاب
+    document.getElementById('helpBox').style.display = 'none';
 }
 
 async function calculate() {
