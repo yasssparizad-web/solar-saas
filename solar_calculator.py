@@ -1,49 +1,46 @@
 # solar_calculator.py
-# هسته محاسباتی نیروگاه خورشیدی (Solar SaaS Core)
+# هسته محاسباتی و مالی نیروگاه خورشیدی (Solar SaaS Core)
 
 def calculate_solar_system(monthly_kwh):
     """
     ورودی: میزان مصرف برق ماهانه به کیلووات‌ساعت (kWh)
-    خروجی: دیکشنری شامل مشخصات کامل سیستم خورشیدی
+    خروجی: دیکشنری شامل مشخصات فنی و تحلیل مالی کامل
     """
-    # ۱. متوسط ساعات تابش مفید خورشید در روز (بر اساس میانگین)
+    # ۱. محاسبات فنی
     peak_sun_hours_per_day = 4.5
-    
-    # ۲. ضریب تلفات سیستم (تلفات دما، کابل، کثیفی پنل و اینورتر - حدود ۲۰ درصد)
     system_efficiency = 0.80
     
-    # ۳. محاسبه مصرف روزانه (کیلووات‌ساعت)
     daily_kwh = monthly_kwh / 30.0
-    
-    # ۴. محاسبه ظرفیت نیروگاه مورد نیاز (کیلووات - kW)
     required_system_kw = daily_kwh / (peak_sun_hours_per_day * system_efficiency)
-    
-    # ۵. گرد کردن ظرفیت به سمت بالا برای اطمینان مهندسی
     recommended_capacity_kw = round(required_system_kw, 2)
     
-    # ۶. محاسبه تعداد پنل‌ها (فرض: پنل‌های استاندارد ۵۵۰ وات = ۰.۵۵ کیلووات)
     panel_power_kw = 0.55
-    total_panels = round((recommended_capacity_kw / panel_power_kw) + 0.49) # گرد کردن به بالا
-    
-    # ۷. تعیین توان اینورتر مورد نیاز (۱۰٪ بالاتر از توان سیستم)
+    total_panels = int(round((recommended_capacity_kw / panel_power_kw) + 0.49))
     inverter_size_kw = round(recommended_capacity_kw * 1.1, 1)
     
-    # ۸. خروجی نهایی به صورت یک ساختار منظم
+    # ۲. محاسبات مالی (تومان)
+    cost_per_kw_toman = 45_000_000
+    estimated_total_cost_toman = int(round(recommended_capacity_kw * cost_per_kw_toman))
+    
+    # ۳. محاسبه تولید سالانه و صرفه‌جویی
+    annual_production_kwh = recommended_capacity_kw * peak_sun_hours_per_day * 365 * system_efficiency
+    electricity_rate_toman = 3_000
+    annual_savings_toman = int(round(annual_production_kwh * electricity_rate_toman))
+    monthly_savings_toman = int(round(annual_savings_toman / 12))
+    
+    # ۴. محاسبه بازگشت سرمایه
+    if annual_savings_toman > 0:
+        payback_years = round(estimated_total_cost_toman / annual_savings_toman, 1)
+    else:
+        payback_years = 0
+
     return {
         "monthly_consumption_kwh": monthly_kwh,
         "recommended_capacity_kw": recommended_capacity_kw,
         "total_panels_550w": total_panels,
         "inverter_size_kw": inverter_size_kw,
+        "estimated_total_cost_toman": estimated_total_cost_toman,
+        "monthly_savings_toman": monthly_savings_toman,
+        "annual_savings_toman": annual_savings_toman,
+        "payback_years": payback_years
     }
-
-# --- تست کد ---
-if __name__ == "__main__":
-    # فرض کنید مصرف ماهانه یک خانه یا واحد تجاری ۶۰۰ کیلووات ساعت است
-    user_consumption = 600
-    result = calculate_solar_system(user_consumption)
-    
-    print("=== نتیجه برآورد مهندسی نیروگاه خورشیدی ===")
-    print(f"مصرف ماهانه: {result['monthly_consumption_kwh']} کیلووات‌ساعت")
-    print(f"ظرفیت پیشنهادی نیروگاه: {result['recommended_capacity_kw']} کیلووات")
-    print(f"تعداد پنل ۵۵۰ وات مورد نیاز: {result['total_panels_550w']} عدد")
-    print(f"توان اینورتر مورد نیاز: {result['inverter_size_kw']} کیلووات")
