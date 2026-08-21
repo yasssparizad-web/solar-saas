@@ -3,31 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه‌گر آنلاین نیروگاه خورشیدی</title>
+    <title>محاسبه‌گر هوشمند فنی و مالی نیروگاه خورشیدی</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0fdf4; text-align: center; padding: 40px 10px; color: #166534; }
-        .box { background: white; max-width: 450px; margin: auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 1rem; }
-        button { background: #16a34a; color: white; border: none; font-weight: bold; cursor: pointer; }
+        body { 
+            font-family: Tahoma, 'Segoe UI', Geneva, Verdana, sans-serif; 
+            background: #f0fdf4; 
+            text-align: center; 
+            padding: 40px 10px; 
+            color: #166534; 
+            line-height: 1.6;
+        }
+        .box { 
+            background: white; 
+            max-width: 480px; 
+            margin: auto; 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+        }
+        h2 { margin-top: 0; color: #15803d; }
+        .input-group { text-align: right; margin-bottom: 15px; }
+        label { font-size: 0.9rem; font-weight: bold; color: #374151; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 6px; 
+            border-radius: 8px; 
+            border: 1px solid #cbd5e1; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+            outline: none;
+        }
+        input:focus { border-color: #16a34a; }
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 10px; 
+            border-radius: 8px; 
+            border: none; 
+            background: #16a34a; 
+            color: white; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background 0.2s;
+        }
         button:hover { background: #15803d; }
-        .result { display: none; margin-top: 20px; background: #f0fdf4; padding: 15px; border-radius: 8px; text-align: right; }
+        .result { 
+            display: none; 
+            margin-top: 25px; 
+            background: #f8fafc; 
+            padding: 20px; 
+            border-radius: 12px; 
+            text-align: right; 
+            border: 1px solid #e2e8f0;
+        }
+        .result h4 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        .result p { margin: 10px 0; font-size: 0.95rem; color: #334155; }
+        .result b { color: #16a34a; font-size: 1.05rem; }
+        .financial-section { 
+            margin-top: 15px; 
+            padding-top: 15px; 
+            border-top: 1px dashed #cbd5e1; 
+        }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>☀️ استارتاپ محاسبه خورشیدی</h2>
-    <p>میزان مصرف برق ماهانه خود (کیلووات‌ساعت) را وارد کنید:</p>
+    <h2>☀️ برآورد آنلاین نیروگاه خورشیدی</h2>
+    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">
+        اطلاعات مصرف خود را وارد کنید تا تحلیلی جامع از ابعاد فنی و مالی نیروگاه دریافت کنید.
+    </p>
 
-    <input type="number" id="kwh" placeholder="مثلاً ۶۰۰">
-    <input type="text" id="phone" placeholder="شماره تماس (جهت دریافت مشاوره)">
+    <div class="input-group">
+        <label for="kwh">مصرف برق ماهانه (کیلووات‌ساعت):</label>
+        <input type="number" id="kwh" placeholder="مثلاً ۶۰۰">
+    </div>
+
+    <div class="input-group">
+        <label for="phone">شماره تماس (جهت دریافت مشاوره رایگان):</label>
+        <input type="text" id="phone" placeholder="۰۹۱۲۰۰۰۰۰۰۰">
+    </div>
+
     <button onclick="calculate()">محاسبه آنلاین سیستم</button>
 
     <div class="result" id="resultBox">
-        <h4>نتیجه برآورد مهندسی:</h4>
+        <h4>📐 مشخصات فنی پیشنهادی:</h4>
         <p>⚡ ظرفیت نیروگاه: <b id="capacity"></b> کیلووات</p>
         <p>🧩 تعداد پنل ۵۵۰ وات: <b id="panels"></b> عدد</p>
         <p>🔌 توان اینورتر: <b id="inverter"></b> کیلووات</p>
+
+        <div class="financial-section">
+            <h4 style="color: #0369a1;">💰 تحلیل مالی و بازگشت سرمایه:</h4>
+            <p>💵 کل سرمایه‌گذاری تقریبی: <b id="totalCost" style="color: #0369a1;"></b> تومان</p>
+            <p>📈 ارزش/صرفه‌جویی ماهانه: <b id="monthlySavings" style="color: #0369a1;"></b> تومان</p>
+            <p>⏳ بازگشت سرمایه تخمینی: <b id="payback" style="color: #0369a1;"></b> سال</p>
+        </div>
     </div>
 </div>
 
@@ -36,21 +108,38 @@ async function calculate() {
     const kwh = document.getElementById('kwh').value;
     const phone = document.getElementById('phone').value;
 
-    if(!kwh) { alert("لطفا میزان مصرف را وارد کنید"); return; }
+    if (!kwh || kwh <= 0) { 
+        alert("لطفاً میزان مصرف ماهانه را به درستی وارد کنید."); 
+        return; 
+    }
 
-    const res = await fetch('/calculate', {
-        method: 'POST',
-        headers: {'Content-Type': 'json'},
-        body: JSON.stringify({ monthly_kwh: kwh, phone: phone })
-    });
+    try {
+        const res = await fetch('/calculate', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ monthly_kwh: kwh, phone: phone })
+        });
 
-    const data = await res.json();
-    if(data.error) { alert(data.error); return; }
+        const data = await res.json();
+        if (data.error) { 
+            alert(data.error); 
+            return; 
+        }
 
-    document.getElementById('capacity').innerText = data.recommended_capacity_kw;
-    document.getElementById('panels').innerText = data.total_panels_550w;
-    document.getElementById('inverter').innerText = data.inverter_size_kw;
-    document.getElementById('resultBox').style.display = 'block';
+        // نمایش نتایج فنی
+        document.getElementById('capacity').innerText = data.recommended_capacity_kw.toLocaleString('fa-IR');
+        document.getElementById('panels').innerText = data.total_panels_550w.toLocaleString('fa-IR');
+        document.getElementById('inverter').innerText = data.inverter_size_kw.toLocaleString('fa-IR');
+
+        // نمایش نتایج مالی
+        document.getElementById('totalCost').innerText = data.estimated_total_cost_toman.toLocaleString('fa-IR');
+        document.getElementById('monthlySavings').innerText = data.monthly_savings_toman.toLocaleString('fa-IR');
+        document.getElementById('payback').innerText = data.payback_years.toLocaleString('fa-IR');
+
+        document.getElementById('resultBox').style.display = 'block';
+    } catch (e) {
+        alert("خطایی در ارتباط با سرور رخ داد. لطفا دوباره تلاش کنید.");
+    }
 }
 </script>
 
