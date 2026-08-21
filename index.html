@@ -15,7 +15,7 @@
         }
         .box { 
             background: white; 
-            max-width: 550px; 
+            max-width: 580px; 
             margin: auto; 
             padding: 25px; 
             border-radius: 16px; 
@@ -124,7 +124,6 @@
         .selected-item:last-child { border-bottom: none; }
         .remove-item { color: #ef4444; cursor: pointer; font-weight: bold; margin-left: 8px; }
 
-        /* بخش مجموع کل لیست دستگاه‌ها */
         .total-summary-row {
             margin-top: 8px;
             padding-top: 8px;
@@ -166,11 +165,48 @@
         .comparison-table th { background-color: #e2e8f0; color: #0f172a; }
         .highlight-row { background-color: #dcfce7; font-weight: bold; }
         .financial-section { margin-top: 15px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
+
+        /* دکمه دانلود گزارش */
+        .pdf-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .pdf-btn:hover { background: #0369a1; }
+
+        /* تنظیمات چاپ برای PDF */
+        @media print {
+            body { background: white; padding: 0; color: black; }
+            .box { box-shadow: none; max-width: 100%; padding: 0; }
+            .input-group, .calc-btn, .help-btn, .pdf-btn, .subtitle, .tutorial-box { display: none !important; }
+            .result { display: block !important; border: none; background: transparent; padding: 0; }
+            .print-header { display: block !important; text-align: center; border-bottom: 2px solid #0f766e; padding-bottom: 12px; margin-bottom: 20px; }
+            .print-footer { display: block !important; margin-top: 30px; font-size: 0.8rem; text-align: center; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+        }
+        .print-header, .print-footer { display: none; }
     </style>
 </head>
 <body>
 
 <div class="box">
+    <!-- هدر مخصوص گزارش چاپی/PDF -->
+    <div class="print-header">
+        <h1 style="color: #0f766e; margin:0;">SolarEnergie Deutschland</h1>
+        <p style="margin: 4px 0; font-size:0.9rem;">Ihr individueller Photovoltaik & Finanzierungsbericht</p>
+    </div>
+
     <h2>☀️ Solaranlagen & KfW-Finanzierung</h2>
     <p class="subtitle">
         Berechnen Sie Ihre Ersparnis & vergleichen Sie Direktkauf mit der KfW 270 Förderung (0% MwSt).
@@ -203,7 +239,6 @@
 
             <div class="selected-list" id="selectedList" style="display:none;">
                 <div id="itemsContainer"></div>
-                <!-- سطر مجموع کل -->
                 <div class="total-summary-row">
                     <span>Gesamter Verbrauch:</span>
                     <span id="listTotalKwh">0 kWh/Monat</span>
@@ -245,13 +280,20 @@
         </div>
     </div>
 
+    <!-- اطلاعات تماس مشتری برای دریافت گزارش -->
     <div class="input-group">
-        <label for="phone">Telefonnummer:</label>
-        <input type="text" id="phone" placeholder="+49 123 456789">
+        <label for="email">E-Mail-Adresse *:</label>
+        <input type="email" id="email" placeholder="max.mustermann@beispiel.de" required>
+    </div>
+
+    <div class="input-group">
+        <label for="phone">Telefonnummer *:</label>
+        <input type="text" id="phone" placeholder="+49 123 456789" required>
     </div>
 
     <button class="calc-btn" onclick="calculate()">Jetzt berechnen</button>
 
+    <!-- بخش نتایج -->
     <div class="result" id="resultBox">
         <h4>📐 Technische Empfehlung:</h4>
         <p>⚡ Empfohlene Leistung: <b id="capacity"></b> kWp</p>
@@ -293,6 +335,15 @@
                 * KfW 270: 10 Jahre Laufzeit, ca. 4,5% Effektivzins. Die Anlage finanziert sich monatlich selbst!
             </p>
         </div>
+
+        <!-- دکمه دانلود PDF کامل -->
+        <button class="pdf-btn" onclick="downloadPDF()">
+            📄 Detaillierten PDF-Bericht herunterladen
+        </button>
+    </div>
+
+    <div class="print-footer">
+        <p>Dieses Dokument wurde automatisch erstellt. Für ein verbindliches Angebot kontaktieren Sie uns bitte.</p>
     </div>
 </div>
 
@@ -364,20 +415,38 @@ function formatCurrency(num) {
     return `0 €`;
 }
 
-async function calculate() {
+function validateInputs() {
     const kwh = document.getElementById('kwh').value;
-    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
 
     if (!kwh || kwh <= 0) { 
         alert("Bitte geben Sie einen gültigen Monatsverbrauch ein."); 
-        return; 
+        return false; 
     }
+    if (!email || !email.includes('@')) {
+        alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
+        return false;
+    }
+    if (!phone || phone.length < 6) {
+        alert("Bitte geben Sie eine gültige Telefonnummer ein.");
+        return false;
+    }
+    return true;
+}
+
+async function calculate() {
+    if (!validateInputs()) return;
+
+    const kwh = document.getElementById('kwh').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
 
     try {
         const res = await fetch('/calculate', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ monthly_kwh: kwh, phone: phone })
+            body: JSON.stringify({ monthly_kwh: kwh, email: email, phone: phone })
         });
 
         const data = await res.json();
@@ -402,6 +471,12 @@ async function calculate() {
     } catch (e) {
         alert("Fehler bei der Verbindung zum Server.");
     }
+}
+
+function downloadPDF() {
+    if (!validateInputs()) return;
+    // باز کردن پنجره چاپ مرورگر که به صورت خودکار فایل PDF خروجی می‌دهد
+    window.print();
 }
 </script>
 
