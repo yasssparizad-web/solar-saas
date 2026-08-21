@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="de" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه‌گر هوشمند فنی و مالی نیروگاه خورشیدی</title>
+    <title>Photovoltaik Rechner Deutschland</title>
     <style>
         body { 
-            font-family: Tahoma, 'Segoe UI', Geneva, Verdana, sans-serif; 
-            background: #f0fdf4; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f8fafc; 
             text-align: center; 
             padding: 40px 10px; 
-            color: #166534; 
+            color: #1e293b; 
             line-height: 1.6;
         }
         .box { 
@@ -19,11 +19,13 @@
             margin: auto; 
             padding: 30px; 
             border-radius: 16px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06); 
+            text-align: left;
         }
-        h2 { margin-top: 0; color: #15803d; }
-        .input-group { text-align: right; margin-bottom: 15px; }
-        label { font-size: 0.9rem; font-weight: bold; color: #374151; }
+        h2 { margin-top: 0; color: #0f766e; text-align: center; }
+        .subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; text-align: center; }
+        .input-group { margin-bottom: 15px; }
+        label { font-size: 0.9rem; font-weight: 600; color: #334155; }
         input { 
             width: 100%; 
             padding: 12px; 
@@ -34,33 +36,32 @@
             font-size: 1rem; 
             outline: none;
         }
-        input:focus { border-color: #16a34a; }
+        input:focus { border-color: #0f766e; }
         button { 
             width: 100%; 
             padding: 14px; 
             margin-top: 10px; 
             border-radius: 8px; 
             border: none; 
-            background: #16a34a; 
+            background: #0f766e; 
             color: white; 
             font-size: 1.1rem; 
             font-weight: bold; 
             cursor: pointer; 
             transition: background 0.2s;
         }
-        button:hover { background: #15803d; }
+        button:hover { background: #115e59; }
         .result { 
             display: none; 
             margin-top: 25px; 
-            background: #f8fafc; 
+            background: #f0fdf4; 
             padding: 20px; 
             border-radius: 12px; 
-            text-align: right; 
-            border: 1px solid #e2e8f0;
+            border: 1px solid #bbf7d0;
         }
-        .result h4 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        .result h4 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; }
         .result p { margin: 10px 0; font-size: 0.95rem; color: #334155; }
-        .result b { color: #16a34a; font-size: 1.05rem; }
+        .result b { color: #0f766e; font-size: 1.05rem; }
         .financial-section { 
             margin-top: 15px; 
             padding-top: 15px; 
@@ -71,34 +72,34 @@
 <body>
 
 <div class="box">
-    <h2>☀️ برآورد آنلاین نیروگاه خورشیدی</h2>
-    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">
-        اطلاعات مصرف خود را وارد کنید تا تحلیلی جامع از ابعاد فنی و مالی نیروگاه دریافت کنید.
+    <h2>☀️ Solaranlagen-Rechner (Deutschland)</h2>
+    <p class="subtitle">
+        Berechnen Sie die optimale Leistung und Wirtschaftlichkeit Ihrer PV-Anlage nach aktuellen EEG-Standards (0% MwSt).
     </p>
 
     <div class="input-group">
-        <label for="kwh">مصرف برق ماهانه (کیلووات‌ساعت):</label>
-        <input type="number" id="kwh" placeholder="مثلاً ۶۰۰">
+        <label for="kwh">Monatlicher Stromverbrauch (kWh): / مصرف ماهانه (کیلووات‌ساعت)</label>
+        <input type="number" id="kwh" placeholder="z.B. 400">
     </div>
 
     <div class="input-group">
-        <label for="phone">شماره تماس (جهت دریافت مشاوره رایگان):</label>
-        <input type="text" id="phone" placeholder="۰۹۱۲۰۰۰۰۰۰۰">
+        <label for="phone">Telefonnummer / شماره تماس:</label>
+        <input type="text" id="phone" placeholder="+49 123 456789">
     </div>
 
-    <button onclick="calculate()">محاسبه آنلاین سیستم</button>
+    <button onclick="calculate()">Jetzt berechnen / محاسبه</button>
 
     <div class="result" id="resultBox">
-        <h4>📐 مشخصات فنی پیشنهادی:</h4>
-        <p>⚡ ظرفیت نیروگاه: <b id="capacity"></b> کیلووات</p>
-        <p>🧩 تعداد پنل ۵۵۰ وات: <b id="panels"></b> عدد</p>
-        <p>🔌 توان اینورتر: <b id="inverter"></b> کیلووات</p>
+        <h4>📐 Technische Empfehlung:</h4>
+        <p>⚡ Empfohlene Leistung: <b id="capacity"></b> kWp</p>
+        <p>🧩 Anzahl Solarmodule (440W): <b id="panels"></b> Stück</p>
+        <p>🔌 Wechselrichter-Leistung: <b id="inverter"></b> kW</p>
 
         <div class="financial-section">
-            <h4 style="color: #0369a1;">💰 تحلیل مالی و بازگشت سرمایه:</h4>
-            <p>💵 کل سرمایه‌گذاری تقریبی: <b id="totalCost" style="color: #0369a1;"></b> تومان</p>
-            <p>📈 ارزش/صرفه‌جویی ماهانه: <b id="monthlySavings" style="color: #0369a1;"></b> تومان</p>
-            <p>⏳ بازگشت سرمایه تخمینی: <b id="payback" style="color: #0369a1;"></b> سال</p>
+            <h4 style="color: #0369a1;">💶 Wirtschaftlichkeitsanalyse (Euro):</h4>
+            <p>💵 Geschätzte Investition (0% MwSt): <b id="totalCost" style="color: #0369a1;"></b> €</p>
+            <p>📈 Monatliche Ersparnis / Ertrag: <b id="monthlySavings" style="color: #0369a1;"></b> €</p>
+            <p>⏳ Amortisationszeit: <b id="payback" style="color: #0369a1;"></b> Jahre</p>
         </div>
     </div>
 </div>
@@ -109,7 +110,7 @@ async function calculate() {
     const phone = document.getElementById('phone').value;
 
     if (!kwh || kwh <= 0) { 
-        alert("لطفاً میزان مصرف ماهانه را به درستی وارد کنید."); 
+        alert("Bitte geben Sie einen gültigen Monatsverbrauch ein."); 
         return; 
     }
 
@@ -126,19 +127,19 @@ async function calculate() {
             return; 
         }
 
-        // نمایش نتایج فنی
-        document.getElementById('capacity').innerText = data.recommended_capacity_kw.toLocaleString('fa-IR');
-        document.getElementById('panels').innerText = data.total_panels_550w.toLocaleString('fa-IR');
-        document.getElementById('inverter').innerText = data.inverter_size_kw.toLocaleString('fa-IR');
+        // Technical details
+        document.getElementById('capacity').innerText = data.recommended_capacity_kw.toLocaleString('de-DE');
+        document.getElementById('panels').innerText = data.total_panels_440w.toLocaleString('de-DE');
+        document.getElementById('inverter').innerText = data.inverter_size_kw.toLocaleString('de-DE');
 
-        // نمایش نتایج مالی
-        document.getElementById('totalCost').innerText = data.estimated_total_cost_toman.toLocaleString('fa-IR');
-        document.getElementById('monthlySavings').innerText = data.monthly_savings_toman.toLocaleString('fa-IR');
-        document.getElementById('payback').innerText = data.payback_years.toLocaleString('fa-IR');
+        // Financial details (EUR)
+        document.getElementById('totalCost').innerText = data.estimated_total_cost_euro.toLocaleString('de-DE');
+        document.getElementById('monthlySavings').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+        document.getElementById('payback').innerText = data.payback_years.toLocaleString('de-DE');
 
         document.getElementById('resultBox').style.display = 'block';
     } catch (e) {
-        alert("خطایی در ارتباط با سرور رخ داد. لطفاً چند لحظه بعد دوباره امتحان کنید.");
+        alert("Fehler bei der Verbindung zum Server.");
     }
 }
 </script>
