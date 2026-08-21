@@ -33,7 +33,6 @@
         }
         label { font-size: 0.85rem; font-weight: 600; color: #334155; }
         
-        /* دکمه جدید تخمین مصرف */
         .help-btn {
             background: #e0f2fe;
             color: #0369a1;
@@ -47,7 +46,7 @@
         }
         .help-btn:hover { background: #bae6fd; }
 
-        input { 
+        input, select { 
             width: 100%; 
             padding: 10px; 
             margin-top: 4px; 
@@ -56,8 +55,9 @@
             box-sizing: border-box; 
             font-size: 0.95rem; 
             outline: none;
+            background: white;
         }
-        input:focus { border-color: #0f766e; }
+        input:focus, select:focus { border-color: #0f766e; }
         
         button.calc-btn { 
             width: 100%; 
@@ -74,7 +74,7 @@
         }
         button.calc-btn:hover { background: #115e59; }
 
-        /* باکس راهنما */
+        /* باکس راهنمای تعاملی */
         .tutorial-box {
             display: none;
             margin-top: 10px;
@@ -84,10 +84,47 @@
             border-radius: 10px;
             font-size: 0.82rem;
             color: #1e293b;
-            text-align: left;
         }
         .tutorial-box h5 { margin: 0 0 8px 0; color: #0369a1; font-size: 0.9rem; }
-        .tutorial-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.78rem; }
+        
+        .appliance-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .appliance-row select { flex: 2; margin-top: 0; }
+        .appliance-row input { flex: 1; margin-top: 0; text-align: center; }
+        .add-btn {
+            background: #0369a1;
+            color: white;
+            border: none;
+            padding: 0 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .selected-list {
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            padding: 4px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .selected-item:last-child { border-bottom: none; }
+        .remove-item { color: #ef4444; cursor: pointer; font-weight: bold; margin-left: 8px; }
+
+        .tutorial-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; }
         .tutorial-table th, .tutorial-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
         .tutorial-table th { background: #e0f2fe; }
 
@@ -130,18 +167,33 @@
     <div class="input-group">
         <div class="label-row">
             <label for="kwh">Monatlicher Stromverbrauch (kWh):</label>
-            <!-- دکمه دقیقاً با عبارت 💡 Stromverbrauch schätzen -->
-            <button type="button" class="help-btn" onclick="toggleHelp()">💡 Stromverbrauch schätzen</button>
+            <button type="button" class="help-btn" onclick="toggleHelp()">💡 Verbrauch berechnen</button>
         </div>
         <input type="number" id="kwh" placeholder="z. B. 400">
 
-        <!-- باکس راهنما -->
+        <!-- باکس راهنما: دو روش (انتخاب دستگاه‌ها یا میانگین خانوار) -->
         <div class="tutorial-box" id="helpBox">
-            <h5>📖 So ermitteln Sie Ihren Stromverbrauch:</h5>
-            <ol style="padding-left: 16px; margin: 4px 0;">
-                <li><b>Stromabrechnung:</b> Schauen Sie auf Ihre letzte Jahresabrechnung unter <i>Jahresverbrauch</i> und teilen Sie diesen Wert durch 12.</li>
-                <li><b>Richtwerte nach Haushaltsgröße:</b> (Klicken Sie auf eine Zeile zur Übernahme)</li>
-            </ol>
+            <h5>⚡ Methode 1: Geräte auswählen</h5>
+            <div class="appliance-row">
+                <select id="applianceSelect">
+                    <option value="25">🧊 Kühlschrank / Gefrierkombination (~25 kWh)</option>
+                    <option value="15">🧺 Waschmaschine (~15 kWh)</option>
+                    <option value="20">🍽️ Spülmaschine (~20 kWh)</option>
+                    <option value="30">💨 Wäschetrockner (~30 kWh)</option>
+                    <option value="15">📺 Fernseher / Entertainment (~15 kWh)</option>
+                    <option value="25">💻 Home-Office PC / Monitor (~25 kWh)</option>
+                    <option value="150">🚗 E-Auto (~150 kWh)</option>
+                    <option value="250">♨️ Wärmepumpe (~250 kWh)</option>
+                </select>
+                <input type="number" id="applianceQty" value="1" min="1" max="10">
+                <button type="button" class="add-btn" onclick="addAppliance()">+</button>
+            </div>
+
+            <div class="selected-list" id="selectedList" style="display:none;">
+                <!-- دستگاه‌های انتخاب شده اینجا اضافه می‌شوند -->
+            </div>
+
+            <h5 style="margin-top: 14px;">📊 Methode 2: Richtwerte nach Haushaltsgröße</h5>
             <table class="tutorial-table">
                 <thead>
                     <tr>
@@ -173,9 +225,6 @@
                     </tr>
                 </tbody>
             </table>
-            <p style="font-size: 0.75rem; color: #64748b; margin-top: 6px; margin-bottom: 0;">
-                * Hinweis: Bei Nutzung von E-Auto oder Wärmepumpe rechnen Sie ca. 50–150 kWh/Monat hinzu.
-            </p>
         </div>
     </div>
 
@@ -211,14 +260,14 @@
                         <td><span id="cashTotal"></span> €</td>
                         <td>0 €</td>
                         <td>+<span id="cashIncome"></span> €</td>
-                        <td style="color:#0f766e;"><b>+<span id="cashNet"></span> €</b></td>
+                        <td style="color:#0f766e;"><b><span id="cashNet"></span></b></td>
                     </tr>
                     <tr class="highlight-row">
                         <td><b>KfW 270 Loan</b></td>
                         <td><b>0 €</b></td>
                         <td>-<span id="kfwPay"></span> €</td>
                         <td>+<span id="kfwIncome"></span> €</td>
-                        <td style="color:#0369a1;"><b>+<span id="kfwNet"></span> €</b></td>
+                        <td style="color:#0369a1;"><b><span id="kfwNet"></span></b></td>
                     </tr>
                 </tbody>
             </table>
@@ -231,6 +280,8 @@
 </div>
 
 <script>
+let totalCalculatedKwh = 0;
+
 function toggleHelp() {
     const box = document.getElementById('helpBox');
     box.style.display = (box.style.display === 'block') ? 'none' : 'block';
@@ -239,6 +290,51 @@ function toggleHelp() {
 function setKwh(val) {
     document.getElementById('kwh').value = val;
     document.getElementById('helpBox').style.display = 'none';
+}
+
+function addAppliance() {
+    const select = document.getElementById('applianceSelect');
+    const qtyInput = document.getElementById('applianceQty');
+    const selectedList = document.getElementById('selectedList');
+    
+    const kwhValue = parseInt(select.value);
+    const qty = parseInt(qtyInput.value) || 1;
+    const text = select.options[select.selectedIndex].text.split('(~')[0].trim();
+    const itemKwh = kwhValue * qty;
+
+    totalCalculatedKwh += itemKwh;
+    document.getElementById('kwh').value = totalCalculatedKwh;
+
+    selectedList.style.display = 'block';
+    
+    const div = document.createElement('div');
+    div.className = 'selected-item';
+    div.innerHTML = `
+        <span>${qty}x ${text} (<b>+${itemKwh} kWh</b>)</span>
+        <span class="remove-item" onclick="removeItem(this, ${itemKwh})">✕</span>
+    `;
+    selectedList.appendChild(div);
+}
+
+function removeItem(el, kwh) {
+    totalCalculatedKwh -= kwh;
+    if (totalCalculatedKwh < 0) totalCalculatedKwh = 0;
+    document.getElementById('kwh').value = totalCalculatedKwh === 0 ? '' : totalCalculatedKwh;
+    
+    const item = el.parentElement;
+    item.remove();
+    
+    const selectedList = document.getElementById('selectedList');
+    if (selectedList.children.length === 0) {
+        selectedList.style.display = 'none';
+    }
+}
+
+function formatCurrency(num) {
+    const formatted = Math.abs(num).toLocaleString('de-DE');
+    if (num > 0) return `+${formatted} €`;
+    if (num < 0) return `-${formatted} €`;
+    return `0 €`;
 }
 
 async function calculate() {
@@ -269,11 +365,11 @@ async function calculate() {
 
         document.getElementById('cashTotal').innerText = data.estimated_total_cost_euro.toLocaleString('de-DE');
         document.getElementById('cashIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
-        document.getElementById('cashNet').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+        document.getElementById('cashNet').innerText = formatCurrency(data.monthly_savings_euro);
 
         document.getElementById('kfwPay').innerText = data.kfw_monthly_payment.toLocaleString('de-DE');
         document.getElementById('kfwIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
-        document.getElementById('kfwNet').innerText = data.kfw_net_monthly_benefit.toLocaleString('de-DE');
+        document.getElementById('kfwNet').innerText = formatCurrency(data.kfw_net_monthly_benefit);
 
         document.getElementById('resultBox').style.display = 'block';
     } catch (e) {
