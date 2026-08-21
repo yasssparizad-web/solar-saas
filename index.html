@@ -15,7 +15,7 @@
         }
         .box { 
             background: white; 
-            max-width: 580px; 
+            max-width: 600px; 
             margin: auto; 
             padding: 25px; 
             border-radius: 16px; 
@@ -74,7 +74,6 @@
         }
         button.calc-btn:hover { background: #115e59; }
 
-        /* باکس راهنما */
         .tutorial-box {
             display: none;
             margin-top: 10px;
@@ -139,7 +138,6 @@
         .tutorial-table th, .tutorial-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
         .tutorial-table th { background: #e0f2fe; }
 
-        /* بخش نتایج */
         .result { 
             display: none; 
             margin-top: 20px; 
@@ -166,7 +164,25 @@
         .highlight-row { background-color: #dcfce7; font-weight: bold; }
         .financial-section { margin-top: 15px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
 
-        /* دکمه دانلود گزارش */
+        /* استایل تحلیل زبانی روان برای خانه داران */
+        .explanatory-text {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .explanatory-text h5 {
+            margin: 10px 0 5px 0;
+            color: #0f766e;
+            font-size: 0.95rem;
+        }
+        .explanatory-text h5:first-child { margin-top: 0; }
+
         .pdf-btn {
             width: 100%;
             padding: 12px;
@@ -186,7 +202,6 @@
         }
         .pdf-btn:hover { background: #0369a1; }
 
-        /* تنظیمات چاپ برای PDF */
         @media print {
             body { background: white; padding: 0; color: black; }
             .box { box-shadow: none; max-width: 100%; padding: 0; }
@@ -201,7 +216,6 @@
 <body>
 
 <div class="box">
-    <!-- هدر مخصوص گزارش چاپی/PDF -->
     <div class="print-header">
         <h1 style="color: #0f766e; margin:0;">SolarEnergie Deutschland</h1>
         <p style="margin: 4px 0; font-size:0.9rem;">Ihr individueller Photovoltaik & Finanzierungsbericht</p>
@@ -219,7 +233,6 @@
         </div>
         <input type="number" id="kwh" placeholder="z. B. 400">
 
-        <!-- باکس راهنما -->
         <div class="tutorial-box" id="helpBox">
             <h5>⚡ Methode 1: Geräte auswählen</h5>
             <div class="appliance-row">
@@ -280,7 +293,6 @@
         </div>
     </div>
 
-    <!-- اطلاعات تماس مشتری برای دریافت گزارش -->
     <div class="input-group">
         <label for="email">E-Mail-Adresse *:</label>
         <input type="email" id="email" placeholder="max.mustermann@beispiel.de" required>
@@ -293,7 +305,6 @@
 
     <button class="calc-btn" onclick="calculate()">Jetzt berechnen</button>
 
-    <!-- بخش نتایج -->
     <div class="result" id="resultBox">
         <h4>📐 Technische Empfehlung:</h4>
         <p>⚡ Empfohlene Leistung: <b id="capacity"></b> kWp</p>
@@ -331,12 +342,25 @@
                 </tbody>
             </table>
 
-            <p style="font-size:0.8rem; color:#64748b; margin-top:10px;">
-                * KfW 270: 10 Jahre Laufzeit, ca. 4,5% Effektivzins. Die Anlage finanziert sich monatlich selbst!
-            </p>
+            <!-- بخش جدید: گزارش روان و کاربردی به زبان آلمانی -->
+            <div class="explanatory-text">
+                <h5>☀️ Was bedeutet dieses Ergebnis für Ihren Alltag?</h5>
+                <p>
+                    Für Ihren Haushalt wird eine Solaranlage mit <b><span id="textPanels"></span> Solarmodulen</b> empfohlen. Diese Anlage deckt Ihren Grundverbrauch ab: Dauerläufer wie Kühlschrank, WLAN-Router, Fernseher und Beleuchtung laufen tagsüber direkt mit kostenlosem Sonnenstrom!
+                </p>
+
+                <h5>💶 Die Finanzierung einfach erklärt:</h5>
+                <p>
+                    <b>1. Direktkauf:</b> Sie investieren einmalig <b><span id="textTotal"></span> €</b>. Ab dem ersten Monat sparen Sie ca. <b><span id="textIncome"></span> €</b> an Stromkosten. Nach etwa 8 bis 9 Jahren hat sich die Anlage komplett abbezahlt und liefert danach über 15–20 Jahre lang rein kostenlosen Strom.
+                </p>
+                <p>
+                    <b>2. KfW 270 Förderung (0 € Anzahlung):</b> Sie zahlen <b>0 € Eigenkapital</b>. Die monatliche Kreditrate beträgt <b><span id="textKfwPay"></span> €</b>, während Sie gleichzeitig <b><span id="textKfwIncome"></span> €</b> an Stromkosten einsparen. 
+                    <br>
+                    <i>Das bedeutet:</i> Die Sonne zahlt Ihre Anlage fast von alleine ab! Nach Ablauf der 10-jährigen Laufzeit gehört die Anlage vollständig Ihnen und Sie profitieren zu 100 % von der Ersparnis.
+                </p>
+            </div>
         </div>
 
-        <!-- دکمه دانلود PDF کامل -->
         <button class="pdf-btn" onclick="downloadPDF()">
             📄 Detaillierten PDF-Bericht herunterladen
         </button>
@@ -455,6 +479,7 @@ async function calculate() {
             return; 
         }
 
+        // جایگذاری در جدول
         document.getElementById('capacity').innerText = data.recommended_capacity_kw.toLocaleString('de-DE');
         document.getElementById('panels').innerText = data.total_panels_440w.toLocaleString('de-DE');
         document.getElementById('inverter').innerText = data.inverter_size_kw.toLocaleString('de-DE');
@@ -467,6 +492,13 @@ async function calculate() {
         document.getElementById('kfwIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
         document.getElementById('kfwNet').innerText = formatCurrency(data.kfw_net_monthly_benefit);
 
+        // جایگذاری در متن تحلیلی آلمانی
+        document.getElementById('textPanels').innerText = data.total_panels_440w.toLocaleString('de-DE');
+        document.getElementById('textTotal').innerText = data.estimated_total_cost_euro.toLocaleString('de-DE');
+        document.getElementById('textIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+        document.getElementById('textKfwPay').innerText = data.kfw_monthly_payment.toLocaleString('de-DE');
+        document.getElementById('textKfwIncome').innerText = data.monthly_savings_euro.toLocaleString('de-DE');
+
         document.getElementById('resultBox').style.display = 'block';
     } catch (e) {
         alert("Fehler bei der Verbindung zum Server.");
@@ -475,7 +507,6 @@ async function calculate() {
 
 function downloadPDF() {
     if (!validateInputs()) return;
-    // باز کردن پنجره چاپ مرورگر که به صورت خودکار فایل PDF خروجی می‌دهد
     window.print();
 }
 </script>
